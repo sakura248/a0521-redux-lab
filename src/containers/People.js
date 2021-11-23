@@ -1,37 +1,29 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux'
 
+import { personAdd, personDelete } from '../actions/personUpdate';
 import Person from '../components/Person/Person';
 import AddPerson from '../components/AddPerson/AddPerson';
 
-const People = () => {
-    const [people, setPeople] = useState([])
 
+// 🔴🔴🔴🔴ここをかえる🔴🔴🔴
+const People = ({ data, personAddFunc, personDeleteFunc}) => {
+    // 🔴🔴🔴🔴ここをかえる🔴🔴🔴
+    // const [people, setPeople] = useState([]) 
 
     const personAddedHandler = () => {
-        const newPerson = {
-            id: Math.random(), // not really unique but good enough here!
-            name: 'John',
-            age: Math.floor( Math.random() * 40 )
-        }
-
-        setPeople( ( prevState ) => {
-            return [
-                ...prevState,
-                newPerson
-            ]
-        } );
+        personAddFunc()
     }
 
-    const personDeletedHandler = (personId) => {
-        setPeople( ( prevState ) => {
-            return prevState.filter(person => person.id !== personId)
-        } );
+    const personDeletedHandler = (id) => {
+        personDeleteFunc(id)
     }
 
     return (
         <div>
             <AddPerson personAdded={personAddedHandler} />
-            {people.map(person => (
+            {console.log("data: ", data)}
+            {data.map((person) => (
                 <Person 
                     key={person.id}
                     name={person.name} 
@@ -42,4 +34,17 @@ const People = () => {
     );
 }
 
-export default People;
+const mapStateToProps = (state) => {
+    return {
+        data: state.personData,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        personAddFunc: () => dispatch(personAdd()),
+        personDeleteFunc: (id) => dispatch(personDelete(id)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(People)
