@@ -25,7 +25,7 @@ export const personReducer = (state = initState, {type, payload}) => {
         case actionType.deletePerson:
             return {
                 ...state, 
-                people: state.filter(person => person.id !== payload) 
+                people: state.people.filter(person => person.id !== payload)
             }
 
         default:
