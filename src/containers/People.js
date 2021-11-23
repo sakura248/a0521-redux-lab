@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
 
-import { personAdd, personDelete } from '../actions/personUpdate';
+import * as actionType from '../actions/personUpdate';
 import Person from '../components/Person/Person';
 import AddPerson from '../components/AddPerson/AddPerson';
 
 
 // 🔴🔴🔴🔴ここをかえる🔴🔴🔴
-const People = ({ data, personAddFunc, personDeleteFunc}) => {
-    // 🔴🔴🔴🔴ここをかえる🔴🔴🔴
-    // const [people, setPeople] = useState([]) 
+const People = ({ peopleProps, personAddFunc, personDeleteFunc}) => {
+
 
     const personAddedHandler = () => {
         personAddFunc()
     }
 
+    // ❓ なんでつかわない？　
     const personDeletedHandler = (id) => {
         personDeleteFunc(id)
     }
 
     return (
         <div>
-            <AddPerson personAdded={personAddedHandler} />
-            {console.log("data: ", data)}
-            {data.map((person) => (
+            <AddPerson personAdded={personAddFunc} />
+            {console.log("data: ", peopleProps)}
+            { peopleProps && peopleProps.map((person) => (
                 <Person 
                     key={person.id}
                     name={person.name} 
                     age={person.age} 
-                    clicked={() => personDeletedHandler(person.id)}/>
+                    clicked={() => personDeleteFunc(person.id)}/>
             ))}
         </div>
     );
@@ -36,14 +36,15 @@ const People = ({ data, personAddFunc, personDeleteFunc}) => {
 
 const mapStateToProps = (state) => {
     return {
-        data: state.personData,
+        peopleProps: state.people,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        personAddFunc: () => dispatch(personAdd()),
-        personDeleteFunc: (id) => dispatch(personDelete(id)),
+        personAddFunc: () => dispatch({type: actionType.addPerson}),
+        // ❓書き方が違う
+        personDeleteFunc: (id) => dispatch({type: actionType.deletePerson, payload: id}),
     }
 }
 

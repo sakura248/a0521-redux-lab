@@ -1,7 +1,7 @@
 // This is action 
 
-export const ADD_PERSON = 'ADD_PERSON'
-export const DELETE_PERSON = 'DELETE_PERSON'
+export const addPerson = 'ADD_PERSON'
+export const deletePerson = 'DELETE_PERSON'
 
 export const personAdd = () => {
     return { 
